@@ -1,10 +1,27 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
+import os
 
 # Title
 st.title("🐶🐱 Image Classification Viewer")
 
+
+# Load predictions
+csv_path = "batch_predictions.csv"
+df = None  # Initialize df
+
+if os.path.exists(csv_path):
+    df = pd.read_csv(csv_path)
+    st.success("Predictions loaded successfully.")
+else:
+    st.warning("Prediction file not found. You can upload one below.")
+
+# Optional: CSV upload fallback
+uploaded_csv = st.file_uploader("Or upload a prediction CSV", type=["csv"])
+if uploaded_csv is not None:
+    df = pd.read_csv(uploaded_csv)
+    st.success("Predictions loaded from uploaded file.")
 
 # Upload image
 st.subheader("Upload an Image")
@@ -26,6 +43,7 @@ if uploaded_file is not None:
             st.warning("No prediction found for this image in batch_predictions.csv.")
     else:
         st.warning("Prediction data is not available.")
+
 
 
 
