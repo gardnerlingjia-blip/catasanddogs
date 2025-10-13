@@ -1,9 +1,11 @@
+
 streamlit
 pandas
 tensorflow
 Pillow
 numpy
+torch
+torchvision
 
-git add requirements.txt
-git commit -m "Add PyTorch and dependencies for live inference"
+
 
