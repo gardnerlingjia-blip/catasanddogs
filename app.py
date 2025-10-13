@@ -1,5 +1,5 @@
 
-import streamlit as st
+mport streamlit as st
 import pandas as pd
 from PIL import Image
 import os
@@ -9,6 +9,8 @@ st.title("🐶🐱 Image Classification Viewer")
 
 # Load predictions
 csv_path = "cats_and_dogs_dataset/batch_predictions.csv"
+df = None  # Initialize df
+
 if os.path.exists(csv_path):
     df = pd.read_csv(csv_path)
     st.success("Predictions loaded successfully.")
@@ -34,16 +36,20 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", width="stretch")
 
-    # Match uploaded image to prediction
-    uploaded_filename = uploaded_file.name.strip().lower()
-    df['filename'] = df['filename'].str.strip().str.lower()
-    match = df[df["filename"] == uploaded_filename]
+    if df is not None and not df.empty:
+        uploaded_filename = uploaded_file.name.strip().lower()
+        df['filename'] = df['filename'].astype(str).str.strip().str.lower()
+        match = df[df["filename"] == uploaded_filename]
 
-    if not match.empty:
-        label = match.iloc[0]["prediction"]
-        st.success(f"Prediction: {label}")
+        if not match.empty:
+            label = match.iloc[0]["prediction"]
+            st.success(f"Prediction: {label}")
+        else:
+            st.warning("No prediction found for this image in batch_predictions.csv.")
     else:
-        st.warning("No prediction found for this image in batch_predictions.csv.")
+        st.warning("Prediction data is not available.")
+
+
 
 
 
