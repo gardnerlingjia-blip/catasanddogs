@@ -1,4 +1,5 @@
 
+
 import streamlit as st
 import pandas as pd
 from PIL import Image
@@ -17,15 +18,12 @@ if uploaded_file is not None:
     match = predictions_df[predictions_df["filename"] == filename]
 
     if not match.empty:
-        label = match.iloc[0]["predicted_label"]
-        confidence = match.iloc[0].get("confidence_score", None)
-
-        if confidence is not None:
-            st.write(f"### Prediction: {label} ({confidence:.2f} confidence)")
-        else:
-            st.write(f"### Prediction: {label}")
+        label = match.iloc[0]["prediction"]
+        st.write(f"### Prediction: {label}")
     else:
         st.write("### No prediction found for this image in batch_predictions.csv.")
+
+
 
 
 
