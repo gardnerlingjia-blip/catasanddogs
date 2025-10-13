@@ -6,6 +6,21 @@ import os
 # Title
 st.title("🐶🐱 Image Classification Viewer")
 
+
+# Try loading from local file
+if os.path.exists(csv_path):
+    df = pd.read_csv(csv_path)
+    st.success("Predictions loaded successfully from local file.")
+else:
+    st.warning("Local prediction file not found. You can upload one below.")
+
+# Fallback: Upload CSV manually
+uploaded_csv = st.file_uploader("Or upload a prediction CSV", type=["csv"])
+if uploaded_csv is not None:
+    df = pd.read_csv(uploaded_csv)
+    st.success("Predictions loaded from uploaded file.")
+
+
 # Load predictions
 csv_path = "batch_predictions.csv"
 df = None  # Initialize df
@@ -52,6 +67,7 @@ if uploaded_file is not None:
 
 st.write("Files in current directory:", os.listdir())
 st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
+
 
 
 
