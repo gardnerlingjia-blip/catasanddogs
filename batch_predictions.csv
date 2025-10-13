@@ -1,4 +1,5 @@
 filename,prediction
-cat1.jpg,cat
-dog1.jpg,dog
-cat2.jpg,cat
+cat.0001.jpg,cat
+dog.0001.jpg,dog
+cat.0002.jpg,cat
+
