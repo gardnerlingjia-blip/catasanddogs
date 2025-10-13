@@ -1,17 +1,28 @@
 
 
+
 import streamlit as st
 import numpy as np
 import tensorflow as tf
+import os
 from PIL import Image
 
 # Title of the app
 st.title("🐶🐱 Real-Time Image Classifier")
 
-# Load the trained model
+# Load the trained model with error handling
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model.h5")
+    model_path = "model.h5"
+    if os.path.exists(model_path) and os.path.getsize(model_path) > 0:
+        try:
+            return tf.keras.models.load_model(model_path)
+        except Exception as e:
+            st.error(f"Failed to load model: {e}")
+            return None
+    else:
+        st.error("model.h5 is missing or empty.")
+        return None
 
 model = load_model()
 
@@ -30,7 +41,7 @@ def preprocess_image(image):
 st.subheader("Upload an Image")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
+if uploaded_file is not None and model is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", width="stretch")
 
@@ -46,3 +57,8 @@ if uploaded_file is not None:
         predicted_index = np.argmax(prediction[0])
         label = class_names[predicted_index]
         confidence = prediction[0][predicted_index]
+
+    st.success(f"Prediction: {label} ({confidence:.2%} confidence)")
+elif uploaded_file is not None and model is None:
+    st.warning("Model could not be loaded. Please check the model.h5 file.")
+
