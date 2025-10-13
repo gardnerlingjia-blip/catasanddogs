@@ -6,16 +6,25 @@ import requests
 from io import BytesIO
 import os
 
-response = requests.get("https://huggingface.co/spaces/Lingjia2025/cat-dog-classifier/blob/main/cat_dog_model.pth")
+
+model_url = "https://huggingface.co/spaces/Lingjia2025/cat-dog-classifier/resolve/main/cat_dog_model.pth"
+response = requests.get(model_url)
 model = torch.load(BytesIO(response.content), map_location=torch.device("cpu"))
+model.eval()
+
+try:
+    response = requests.get(model_url)
+    response.raise_for_status()
+    model = torch.load(BytesIO(response.content), map_location=torch.device("cpu"))
+    model.eval()
+except Exception as e:
+    st.error(f"Failed to load model: {e}")
+    model = None
 
 
 # Title
 st.title("🐶🐱 Image Classification Viewer")
 
-
-csv_path = "batch_predictions.csv"
-df = None  # Initialize df
 
 # Try loading from local file
 if os.path.exists(csv_path):
@@ -78,6 +87,7 @@ if uploaded_file is not None:
 
 st.write("Files in current directory:", os.listdir())
 st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
+
 
 
 
