@@ -49,3 +49,10 @@ if uploaded_file is not None:
         st.warning("Prediction data is not available.")
 
 
+
+st.write("Files in current directory:", os.listdir())
+st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
+
+
+
+
