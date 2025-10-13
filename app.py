@@ -5,7 +5,7 @@ import tensorflow as tf
 from PIL import Image
 
 # Load the trained model
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("batch_predictions.csv")
 
 # Define class names based on training order
 class_names = ["cat", "dog"]
@@ -39,6 +39,7 @@ if uploaded_file is not None:
         confidence = prediction[0][predicted_index]
 
     st.write(f"### Prediction: {label} ({confidence:.2f} confidence)")
+
 
 
 
