@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
-import os
 
 # Title
 st.title("🐶🐱 Image Classification Viewer")
@@ -27,6 +26,7 @@ if uploaded_file is not None:
             st.warning("No prediction found for this image in batch_predictions.csv.")
     else:
         st.warning("Prediction data is not available.")
+
 
 
 
