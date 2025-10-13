@@ -1,5 +1,5 @@
 
-mport streamlit as st
+import streamlit as st
 import pandas as pd
 from PIL import Image
 import os
@@ -48,6 +48,7 @@ if uploaded_file is not None:
             st.warning("No prediction found for this image in batch_predictions.csv.")
     else:
         st.warning("Prediction data is not available.")
+
 
 
 
