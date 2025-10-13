@@ -1,48 +1,13 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
-import torch
-import requests
-from io import BytesIO
 import os
-
-
-model_url = "https://huggingface.co/spaces/Lingjia2025/cat-dog-classifier/resolve/main/cat_dog_model.pth"
-response = requests.get(model_url)
-model = torch.load(BytesIO(response.content), map_location=torch.device("cpu"))
-model.eval()
-
-try:
-    response = requests.get(model_url)
-    response.raise_for_status()
-    model = torch.load(BytesIO(response.content), map_location=torch.device("cpu"))
-    model.eval()
-except Exception as e:
-    st.error(f"Failed to load model: {e}")
-    model = None
-
 
 # Title
 st.title("🐶🐱 Image Classification Viewer")
 
-
-# Try loading from local file
-if os.path.exists(csv_path):
-    df = pd.read_csv(csv_path)
-    st.success("Predictions loaded successfully from local file.")
-else:
-    st.warning("Local prediction file not found. You can upload one below.")
-
-# Fallback: Upload CSV manually
-uploaded_csv = st.file_uploader("Or upload a prediction CSV", type=["csv"])
-if uploaded_csv is not None:
-    df = pd.read_csv(uploaded_csv)
-    st.success("Predictions loaded from uploaded file.")
-
-
-
 # Load predictions
-csv_path = "batch_predictions.csv"
+csv_path = "cats_and_dogs_dataset/batch_predictions.csv"
 df = None  # Initialize df
 
 if os.path.exists(csv_path):
@@ -83,10 +48,6 @@ if uploaded_file is not None:
     else:
         st.warning("Prediction data is not available.")
 
-
-
-st.write("Files in current directory:", os.listdir())
-st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
 
 
 
