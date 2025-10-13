@@ -1,6 +1,5 @@
 
 
-
 import streamlit as st
 import numpy as np
 import tensorflow as tf
@@ -43,7 +42,7 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 
 if uploaded_file is not None and model is not None:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", width="stretch")
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
     # Preprocess and predict
     processed_image = preprocess_image(image)
@@ -61,4 +60,3 @@ if uploaded_file is not None and model is not None:
     st.success(f"Prediction: {label} ({confidence:.2%} confidence)")
 elif uploaded_file is not None and model is None:
     st.warning("Model could not be loaded. Please check the model.h5 file.")
-
