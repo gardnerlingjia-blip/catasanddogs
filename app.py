@@ -7,7 +7,7 @@ import os
 st.title("🐶🐱 Image Classification Viewer")
 
 # Load predictions
-csv_path = "catsanddogs/batch_predictions.csv"
+csv_path = "https://github.com/gardnerlingjia-blip/catasanddogs/edit/main/app.py"
 df = None  # Initialize df
 
 if os.path.exists(csv_path):
@@ -52,6 +52,7 @@ if uploaded_file is not None:
 
 st.write("Files in current directory:", os.listdir())
 st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
+
 
 
 
