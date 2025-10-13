@@ -2,3 +2,4 @@ streamlit
 pandas
 tensorflow
 Pillow
+numpy
