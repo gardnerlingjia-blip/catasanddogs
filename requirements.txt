@@ -3,3 +3,7 @@ pandas
 tensorflow
 Pillow
 numpy
+
+git add requirements.txt
+git commit -m "Add PyTorch and dependencies for live inference"
+
