@@ -1,7 +1,14 @@
 import streamlit as st
 import pandas as pd
 from PIL import Image
+import torch
+import requests
+from io import BytesIO
 import os
+
+response = requests.get("https://huggingface.co/spaces/Lingjia2025/cat-dog-classifier/blob/main/cat_dog_model.pth")
+model = torch.load(BytesIO(response.content), map_location=torch.device("cpu"))
+
 
 # Title
 st.title("🐶🐱 Image Classification Viewer")
@@ -71,6 +78,7 @@ if uploaded_file is not None:
 
 st.write("Files in current directory:", os.listdir())
 st.write("Files in 'catsanddogs' folder:", os.listdir("catsanddogs"))
+
 
 
 
