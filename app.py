@@ -7,7 +7,7 @@ import os
 st.title("🐶🐱 Image Classification Viewer")
 
 # Load predictions
-csv_path = "cats_and_dogs_dataset/batch_predictions.csv"
+csv_path = "batch_predictions.csv"
 df = None  # Initialize df
 
 if os.path.exists(csv_path):
@@ -47,6 +47,7 @@ if uploaded_file is not None:
             st.warning("No prediction found for this image in batch_predictions.csv.")
     else:
         st.warning("Prediction data is not available.")
+
 
 
 
