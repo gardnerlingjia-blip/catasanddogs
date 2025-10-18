@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 filename,prediction
 cat.4001.jpg,cat
 dog.4001.jpg,dog
 dog.4002.jpg,dog
 cat.4002.jpg,cat
+=======
+filename,prediction
+cat.4001.jpg,cat
+dog.4001.jpg,dog
+dog.4002.jpg,dog
+cat.4002.jpg,cat
+
+
+>>>>>>> b25e77100e7142cd9a7d90c96fa626c84b22bb74
