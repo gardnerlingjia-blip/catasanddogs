@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import streamlit as st
 import pandas as pd
 from PIL import Image
@@ -46,7 +45,6 @@ if uploaded_file is not None:
         st.warning("Prediction data is not available.")
 
 
-=======
 import streamlit as st
 import pandas as pd
 from PIL import Image
@@ -109,4 +107,3 @@ if uploaded_file is not None:
 
 
 
->>>>>>> b25e77100e7142cd9a7d90c96fa626c84b22bb74
