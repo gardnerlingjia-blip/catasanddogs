@@ -1,8 +1,11 @@
 
+
 import streamlit as st
 from PIL import Image
 import torch
-from torchvision import transforms
+import torch.nn as nn
+from torchvision import transforms, models
+import pandas as pd
 import os
 
 # Title
@@ -11,8 +14,12 @@ st.title("🐶🐱 Image Classification Viewer (PyTorch)")
 # --- PyTorch Model Loading ---
 @st.cache_resource
 def load_model():
-    # Replace 'your_model.pt' with your actual model file name
-    model = torch.load('your_model.pt', map_location=torch.device('cpu'))
+    # Recreate the model architecture
+    model = models.resnet18(weights='IMAGENET1K_V1')
+    model.fc = nn.Linear(model.fc.in_features, 2)  # 2 classes: cat and dog
+
+    # Load the saved weights
+    model.load_state_dict(torch.load('best_model.pt', map_location=torch.device('cpu')))
     model.eval()
     return model
 
@@ -21,23 +28,21 @@ model = load_model()
 # --- Define Preprocessing (adjust as needed for your model) ---
 def preprocess_image(image):
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),  # Change to your model's input size
+        transforms.Resize((224, 224)),  # Match model input size
         transforms.ToTensor(),
-        # Uncomment and adjust normalization if your model expects it:
-        # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # Match ResNet normalization
     ])
     return transform(image).unsqueeze(0)
 
 # --- Map Model Output to Label ---
 def decode_prediction(output):
-    # Replace with your actual class names
     class_names = ['cat', 'dog']
     _, predicted = torch.max(output, 1)
     return class_names[predicted.item()]
 
 # --- Optional: CSV batch predictions (legacy support) ---
 csv_path = "batch_predictions.csv"
-df = None  # Initialize df
+df = None
 
 if os.path.exists(csv_path):
     df = pd.read_csv(csv_path)
@@ -77,7 +82,4 @@ if uploaded_file is not None:
             st.info("No prediction found for this image in batch_predictions.csv.")
     else:
         st.info("No batch prediction data available.")
-
-
-
 

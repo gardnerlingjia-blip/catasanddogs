@@ -100,7 +100,7 @@ for epoch in range(num_epochs):
     # --- Save best model ---
     if val_acc > best_val_acc:
         best_val_acc = val_acc
-        torch.save(model, 'best_model.pt')
+        torch.save(model.state_dict(), 'best_model.pt')
         print("Best model saved.")
 
 print("Training complete. Best validation accuracy: {:.4f}".format(best_val_acc))
