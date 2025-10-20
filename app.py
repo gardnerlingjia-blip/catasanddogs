@@ -1,13 +1,41 @@
+
 import streamlit as st
-import pandas as pd
 from PIL import Image
+import torch
+from torchvision import transforms
 import os
 
 # Title
-st.title("🐶🐱 Image Classification Viewer")
+st.title("🐶🐱 Image Classification Viewer (PyTorch)")
 
+# --- PyTorch Model Loading ---
+@st.cache_resource
+def load_model():
+    # Replace 'your_model.pt' with your actual model file name
+    model = torch.load('your_model.pt', map_location=torch.device('cpu'))
+    model.eval()
+    return model
 
-# Load predictions
+model = load_model()
+
+# --- Define Preprocessing (adjust as needed for your model) ---
+def preprocess_image(image):
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),  # Change to your model's input size
+        transforms.ToTensor(),
+        # Uncomment and adjust normalization if your model expects it:
+        # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    return transform(image).unsqueeze(0)
+
+# --- Map Model Output to Label ---
+def decode_prediction(output):
+    # Replace with your actual class names
+    class_names = ['cat', 'dog']
+    _, predicted = torch.max(output, 1)
+    return class_names[predicted.item()]
+
+# --- Optional: CSV batch predictions (legacy support) ---
 csv_path = "batch_predictions.csv"
 df = None  # Initialize df
 
@@ -17,31 +45,39 @@ if os.path.exists(csv_path):
 else:
     st.warning("Prediction file not found. You can upload one below.")
 
-# Optional: CSV upload fallback
 uploaded_csv = st.file_uploader("Or upload a prediction CSV", type=["csv"])
 if uploaded_csv is not None:
     df = pd.read_csv(uploaded_csv)
     st.success("Predictions loaded from uploaded file.")
 
-# Upload image
+# --- Image Upload and Prediction ---
 st.subheader("Upload an Image")
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert('RGB')
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
+    # --- PyTorch Prediction ---
+    img_tensor = preprocess_image(image)
+    with torch.no_grad():
+        output = model(img_tensor)
+        predicted_label = decode_prediction(output)
+    st.success(f"PyTorch Prediction: {predicted_label}")
+
+    # --- (Optional) Legacy CSV Lookup ---
     if df is not None and not df.empty:
         uploaded_filename = uploaded_file.name.strip().lower()
         df['filename'] = df['filename'].astype(str).str.strip().str.lower()
         match = df[df["filename"] == uploaded_filename]
-
         if not match.empty:
             label = match.iloc[0]["prediction"]
-            st.success(f"Prediction: {label}")
+            st.info(f"Legacy CSV Prediction: {label}")
         else:
-            st.warning("No prediction found for this image in batch_predictions.csv.")
+            st.info("No prediction found for this image in batch_predictions.csv.")
     else:
-        st.warning("Prediction data is not available.")
+        st.info("No batch prediction data available.")
+
+
 
 
